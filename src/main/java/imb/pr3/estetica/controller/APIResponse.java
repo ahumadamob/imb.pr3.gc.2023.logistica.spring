@@ -7,14 +7,14 @@ public class APIResponse<T> {
 	private int status;
 	private List <String> messages;
 	private T data;
-	
+
 	public APIResponse(int status, List<String> messages, T data) {
 		super();
 		this.status = status;
 		this.messages = messages;
 		this.data = data;
 	}
-	
+
 	public int getStatus() {
 		return status;
 	}
@@ -33,6 +33,5 @@ public class APIResponse<T> {
 	public void setData(T data) {
 		this.data = data;
 	}
-	
 
 }
