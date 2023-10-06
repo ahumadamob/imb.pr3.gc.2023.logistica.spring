@@ -26,13 +26,13 @@ public class RodadoController {
     IRodadoService service;
 
     @GetMapping("/rodado")
-    public ResponseEntity<APIResponse<List<Rodado>>> buscarTodos() {
+    public ResponseEntity<APIResponse<List<Rodado>>> buscarTodosRodados() {
         APIResponse<List<Rodado>> response = new APIResponse<>(200, null, service.buscarTodos());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @GetMapping("/rodado/{id}")
-    public ResponseEntity<APIResponse<Rodado>> buscarPorId(@PathVariable("id") Integer id) {
+    public ResponseEntity<APIResponse<Rodado>> buscarRodadoPorId(@PathVariable("id") Integer id) {
         Rodado rodado = service.buscarPorId(id);
         if (rodado == null) {
             List<String> messages = new ArrayList<>();
@@ -62,8 +62,44 @@ public class RodadoController {
         APIResponse<Rodado> response = new APIResponse<>(HttpStatus.CREATED.value(), null, rodado);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+    
+    @PutMapping("/rodado/{id}")
+    public ResponseEntity<APIResponse<Rodado>> actualizarRodado(@PathVariable Integer id,@RequestBody Rodado rodado){
+    	boolean isError;
+        String idStr;
+        if (id != null) {
+            Rodado buscaRodado = service.buscarPorId(id);
+            idStr = id.toString();
+            if (buscaRodado != null) {
+                // Devolver un OK
+                isError = false;
+            } else {
+                // Devolver un Error
+                isError = true;
+            }
+        } else {
+            idStr = "<No definido>";
+            // Devolver un error
+            isError = true;
+        }
 
-    @PutMapping("/rodado")
+        if (isError) {
+            // Devolver el error
+            List<String> messages = new ArrayList<>();
+            messages.add("No existe un rodado para actualizar con el id = " + idStr);
+            messages.add("Para crear un nuevo rodado utilice el verbo POST");
+            APIResponse<Rodado> response = new APIResponse<>(HttpStatus.BAD_REQUEST.value(), messages, null);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } else {
+            // Devolver el OK
+            service.crear(rodado);
+            APIResponse<Rodado> response = new APIResponse<>(HttpStatus.OK.value(), null, rodado);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+    }
+    
+
+    /*@PutMapping("/rodado")
     public ResponseEntity<APIResponse<Rodado>> actualizarRodado(@RequestBody Rodado rodado) {
         boolean isError;
         String idStr;
@@ -96,23 +132,42 @@ public class RodadoController {
             APIResponse<Rodado> response = new APIResponse<>(HttpStatus.OK.value(), null, rodado);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-    }
+    }*/
 
     @DeleteMapping("/rodado/{id}")
-    public ResponseEntity<APIResponse<Rodado>> eliminar(@PathVariable("id") Integer id) {
+    public ResponseEntity<APIResponse<Rodado>> eliminarRodado(@PathVariable("id") Integer id) {
+        // Búsqueda del Rodado por ID
         Rodado buscaRodado = service.buscarPorId(id);
+        
+        // Comprobación de existencia del Rodado
         if (buscaRodado == null) {
-            // Error
+            // Si no se encuentra el Rodado, se genera una respuesta de error
+            
+            //Crear una lista de mensajes de error
             List<String> messages = new ArrayList<>();
             messages.add("No existe un rodado para eliminar con el id = " + id.toString());
+            
+            // Crear una respuesta de error con el código de estado HTTP 400 (Bad Request)
             APIResponse<Rodado> response = new APIResponse<>(HttpStatus.BAD_REQUEST.value(), messages, null);
+            
+            // Devolver la respuesta de error
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } else {
+            // El Rodado existe, proceder con la eliminación
+            
+            // Llamar al servicio para eliminar el Rodado por su ID
             service.eliminar(id);
+            
+            // Crear una lista de mensajes de éxito
             List<String> messages = new ArrayList<>();
             messages.add("El rodado que figura en el cuerpo ha sido eliminado");
+            
+            // Crear una respuesta de éxito con el código de estado HTTP 200 (OK)
             APIResponse<Rodado> response = new APIResponse<>(HttpStatus.OK.value(), messages, buscaRodado);
+            
+            // Devolver la respuesta de éxito
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
     }
+    
 }
