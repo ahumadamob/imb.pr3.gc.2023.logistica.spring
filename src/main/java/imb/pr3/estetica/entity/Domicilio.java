@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Domicilio {
@@ -13,6 +14,7 @@ public class Domicilio {
 	private Integer id;
 	private String calle;
 	private Integer altura;
+	@ManyToOne
 	private Integer ciudadid;
 	private String referencias;
 
