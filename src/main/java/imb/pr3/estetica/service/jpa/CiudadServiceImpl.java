@@ -29,10 +29,8 @@ public class CiudadServiceImpl  implements ICiudadService  {
 	}
 
 	@Override
-	public void guardar(Ciudad ciudad) {
-		repository.save(ciudad);
-
-	}
+	public Ciudad guardar(Ciudad ciudad) {
+		return repository.save(ciudad);
 
 	@Override
 	public void eliminar(Integer id) {
