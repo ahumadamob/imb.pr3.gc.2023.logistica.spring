@@ -152,8 +152,8 @@ public class ProvinciaController {
 
 	
 	
-	@DeleteMapping("/provincia/{id}")
-	public ResponseEntity<APIResponse<Provincia>> eliminarProvincia(@PathVariable("id") Integer id) {
+	
+	/*public ResponseEntity<APIResponse<Provincia>> eliminarProvincia(@PathVariable("id") Integer id) {
 		Provincia buscaProvincia = service.buscarPorId(id);
 		if(buscaProvincia == null) {
 			//Error
@@ -170,16 +170,19 @@ public class ProvinciaController {
 			//eliminar
 		}
 		
-	}
+	}*/
 
 	
 
-	/*NO me elimina el id que solicito
-	 * public ResponseEntity<APIResponse<Provincia>> eliminarProvincia(@PathVariable("id") Integer id){
-		return service.existe(id) ? ResponseUtil.success(null):
-			ResponseUtil.badRequest("No existe la provincia con el identificador proporcionado");
-
-	}*/
+	 @DeleteMapping("/provincia/{id}")
+	 public ResponseEntity<APIResponse<Provincia>> eliminarProvincia(@PathVariable("id") Integer id) {
+		    if (service.existe(id)) {
+		        service.eliminar(id); // Intenta eliminar la provincia
+		        return ResponseUtil.success("Provincia con ID " + id + " ha sido eliminada correctamente");
+		    } else {
+		        return ResponseUtil.badRequest("No existe la provincia con el identificador proporcionado");
+		    }
+		}
 	
 	
     @ExceptionHandler(Exception.class)

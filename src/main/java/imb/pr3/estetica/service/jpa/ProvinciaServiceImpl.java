@@ -40,7 +40,6 @@ public class ProvinciaServiceImpl implements IProvinciaService {
 	@Override
 	public void eliminar(Integer id) {
 		repository.deleteById(id);
-
 	}
 
 	@Override
