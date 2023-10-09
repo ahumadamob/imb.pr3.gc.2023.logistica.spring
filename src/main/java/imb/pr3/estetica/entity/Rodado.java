@@ -4,6 +4,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Rodado {
@@ -12,8 +14,11 @@ public class Rodado {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String patente;
-	private String marca;
+	@ManyToOne
+    @JoinColumn(name = "marca_id")
+    private Marca marca;
 	private Integer modelo;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -26,12 +31,12 @@ public class Rodado {
 	public void setPatente(String patente) {
 		this.patente = patente;
 	}
-	public String getMarca() {
-		return marca;
-	}
-	public void setMarca(String marca) {
-		this.marca = marca;
-	}
+	public Marca getMarca() {
+        return marca;
+    }
+    public void setMarca(Marca marca) {
+        this.marca = marca;
+    }
 	public Integer getModelo() {
 		return modelo;
 	}
