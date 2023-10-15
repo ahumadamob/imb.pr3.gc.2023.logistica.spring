@@ -39,7 +39,7 @@ public class DomicilioController {
 	@GetMapping("/domicilio")
 	public ResponseEntity<APIResponse<List<Domicilio>>>obtenerTodosLosDomicilios(){
 	    List<Domicilio> domicilio = service.buscarTodosDomicilios();
-	    return domicilio.isEmpty() ? ResponseUtil.notFound("No hay provincias") // ? IF ternario
+	    return domicilio.isEmpty() ? ResponseUtil.notFound("No hay Domicilio") // ? IF ternario
 	            :ResponseUtil.success(domicilio);
 	}
 	/*
@@ -152,7 +152,7 @@ public class DomicilioController {
 	        service.eliminar(id);
 	        return ResponseUtil.successDeleted("Domicilio con ID " + id + " ha sido eliminada correctamente");
 	    }else {
-	        return ResponseUtil.badRequest("No existe la provincia con el identificador proporcionado");
+	        return ResponseUtil.badRequest("No existe el domicilio con el id identificado");
 	    }
 	}
     @ExceptionHandler(Exception.class)

@@ -15,7 +15,7 @@ public class Domicilio {
 	private String calle;
 	private Integer altura;
 	@ManyToOne
-	private Integer ciudadid;
+	private Ciudad ciudadid;
 	private String referencias;
 
 
@@ -37,10 +37,10 @@ public class Domicilio {
 	public void setAltura(Integer altura) {
 		this.altura = altura;
 	}
-	public Integer getCiudadid() {
+	public Ciudad getCiudadid() {
 		return ciudadid;
 	}
-	public void setCiudadid(Integer ciudadid) {
+	public void setCiudadid(Ciudad ciudadid) {
 		this.ciudadid = ciudadid;
 	}
 	public String getReferencias() {
