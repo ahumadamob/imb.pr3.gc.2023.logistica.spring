@@ -32,15 +32,18 @@ public class ProvinciaServiceImpl implements IProvinciaService {
 	}
 
 	@Override
-	public void guardar(Provincia provincia) {
-		repository.save(provincia);
+	public Provincia guardar(Provincia provincia) {
+		return repository.save(provincia);
 
 	}
 
 	@Override
 	public void eliminar(Integer id) {
 		repository.deleteById(id);
-
 	}
 
+	@Override
+	public boolean existe(Integer id) {
+    	return (id == null) ? false: repository.existsById(id);
+    }
 }
