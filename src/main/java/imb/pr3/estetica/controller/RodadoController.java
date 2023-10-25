@@ -27,41 +27,53 @@ public class RodadoController {
 
     @GetMapping("/rodado")
     public ResponseEntity<APIResponse<List<Rodado>>> buscarTodosRodados() {
-        APIResponse<List<Rodado>> response = new APIResponse<>(200, null, service.buscarTodos());
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+        List<Rodado> rodados = service.buscarTodos();
+        if (rodados.isEmpty()) {
+            List<String> messages = new ArrayList<>();
+            messages.add("No se encontraron rodados.");
+            return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, messages);
+        } else {
+            return ResponseUtil.createSuccessResponse(HttpStatus.OK, rodados);
+        }
     }
 
     @GetMapping("/rodado/{id}")
     public ResponseEntity<APIResponse<Rodado>> buscarRodadoPorId(@PathVariable("id") Integer id) {
         Rodado rodado = service.buscarPorId(id);
+
         if (rodado == null) {
             List<String> messages = new ArrayList<>();
             messages.add("No se encontró el Rodado con el número de id = " + id.toString());
             messages.add("Revise el parámetro");
-            APIResponse<Rodado> response = new APIResponse<>(HttpStatus.BAD_REQUEST.value(), messages, null);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, messages);
         } else {
-            APIResponse<Rodado> response = new APIResponse<>(HttpStatus.OK.value(), null, rodado);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return ResponseUtil.createSuccessResponse(HttpStatus.OK, rodado);
         }
     }
 
+
     @PostMapping("/rodado")
     public ResponseEntity<APIResponse<Rodado>> crearRodado(@RequestBody Rodado rodado) {
+        if (rodado.getPatente() == null || rodado.getPatente().isEmpty()) {
+            List<String> messages = new ArrayList<>();
+            messages.add("La patente es obligatoria y no se proporcionó.");
+            return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, messages);
+        }
+
         if (rodado.getId() != null) {
             Rodado buscaRodado = service.buscarPorId(rodado.getId());
             if (buscaRodado != null) {
                 List<String> messages = new ArrayList<>();
                 messages.add("Ya existe un rodado con el id = " + rodado.getId().toString());
                 messages.add("Para actualizar utilice el verbo PUT");
-                APIResponse<Rodado> response = new APIResponse<>(HttpStatus.BAD_REQUEST.value(), messages, null);
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+                return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, messages);
             }
         }
+
         service.crear(rodado);
-        APIResponse<Rodado> response = new APIResponse<>(HttpStatus.CREATED.value(), null, rodado);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        return ResponseUtil.createSuccessResponse(HttpStatus.CREATED, rodado);
     }
+
     
     @PutMapping("/rodado/{id}")
     public ResponseEntity<APIResponse<Rodado>> actualizarRodado(@PathVariable Integer id,@RequestBody Rodado rodado){
@@ -88,13 +100,11 @@ public class RodadoController {
             List<String> messages = new ArrayList<>();
             messages.add("No existe un rodado para actualizar con el id = " + idStr);
             messages.add("Para crear un nuevo rodado utilice el verbo POST");
-            APIResponse<Rodado> response = new APIResponse<>(HttpStatus.BAD_REQUEST.value(), messages, null);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, messages);
         } else {
             // Devolver el OK
             service.crear(rodado);
-            APIResponse<Rodado> response = new APIResponse<>(HttpStatus.OK.value(), null, rodado);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return ResponseUtil.createSuccessResponse(HttpStatus.OK, rodado);
         }
     }
     
@@ -147,11 +157,8 @@ public class RodadoController {
             List<String> messages = new ArrayList<>();
             messages.add("No existe un rodado para eliminar con el id = " + id.toString());
             
-            // Crear una respuesta de error con el código de estado HTTP 400 (Bad Request)
-            APIResponse<Rodado> response = new APIResponse<>(HttpStatus.BAD_REQUEST.value(), messages, null);
-            
-            // Devolver la respuesta de error
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            // Crear una respuesta de error
+            return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, messages);
         } else {
             // El Rodado existe, proceder con la eliminación
             
@@ -163,11 +170,26 @@ public class RodadoController {
             messages.add("El rodado que figura en el cuerpo ha sido eliminado");
             
             // Crear una respuesta de éxito con el código de estado HTTP 200 (OK)
-            APIResponse<Rodado> response = new APIResponse<>(HttpStatus.OK.value(), messages, buscaRodado);
-            
-            // Devolver la respuesta de éxito
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            return ResponseUtil.createSuccessResponse(HttpStatus.OK, messages, buscaRodado);
         }
     }
+    
+    @GetMapping("/rodado/existe/{id}")
+    public ResponseEntity<APIResponse<String>> existe(@PathVariable Integer id) {
+        boolean existe = service.existePorId(id);
+        String mensaje;
+
+        if (existe) {
+            mensaje = "El rodado con el ID " + id + " existe.";
+        } else {
+            mensaje = "El rodado con el ID " + id + " no existe.";
+        }
+
+        List<String> messages = new ArrayList<>();
+        messages.add(mensaje);
+
+        return ResponseUtil.createSuccessResponse(HttpStatus.OK, messages, mensaje);
+    }
+
     
 }

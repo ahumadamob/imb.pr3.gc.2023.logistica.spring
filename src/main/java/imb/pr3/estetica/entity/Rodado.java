@@ -17,7 +17,7 @@ public class Rodado {
 	@ManyToOne
     @JoinColumn(name = "marca_id")
     private Marca marca;
-	private Integer modelo;
+	private Integer añoFabricacion;
 	
 	public Integer getId() {
 		return id;
@@ -37,11 +37,13 @@ public class Rodado {
     public void setMarca(Marca marca) {
         this.marca = marca;
     }
-	public Integer getModelo() {
-		return modelo;
+    
+	public Integer getAñoFabricacion() {
+		return añoFabricacion;
 	}
-	public void setModelo(Integer modelo) {
-		this.modelo = modelo;
+	
+	public void setAñoFabricacion(Integer añoFabricacion) {
+		this.añoFabricacion = añoFabricacion;
 	}
 
 }

@@ -40,5 +40,11 @@ public class RodadoService implements IRodadoService{
 	public void eliminar(Integer id) {
 		repository.deleteById(id);
 	}
+	
+	@Override
+    public boolean existePorId(Integer id) {
+        Rodado rodado = buscarPorId(id);
+        return rodado != null;
+    }
 
 }

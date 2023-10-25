@@ -10,5 +10,6 @@ public interface IRodadoService {
 	Rodado buscarPorId(Integer id);
 	void crear(Rodado rodado);
 	void eliminar(Integer id);
+	boolean existePorId(Integer id);
 
 }
