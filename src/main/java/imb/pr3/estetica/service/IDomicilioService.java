@@ -3,7 +3,7 @@ import java.util.List;
 import imb.pr3.estetica.entity.Domicilio;
 
 public interface IDomicilioService {
-	List<Domicilio> buscarTodosDomicilios();
+	List<Domicilio> buscarTodosLosDomicilios();
 	Domicilio buscarPorId(Integer id);
 	Domicilio guardar(Domicilio domicilio);
 	void eliminar(Integer id);

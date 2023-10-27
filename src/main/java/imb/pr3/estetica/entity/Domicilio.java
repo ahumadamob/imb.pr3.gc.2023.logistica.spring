@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
@@ -15,6 +16,7 @@ public class Domicilio {
 	private String calle;
 	private Integer altura;
 	@ManyToOne
+	@JoinColumn(name="ciudadid") 
 	private Ciudad ciudadid;
 	private String referencias;
 

@@ -13,7 +13,7 @@ public class DomicilioServiceImpl  implements IDomicilioService  {
     DomicilioRepository repository;
 
 	@Override
-	public List<Domicilio> buscarTodosDomicilios() {
+	public List<Domicilio> buscarTodosLosDomicilios() {
 		return repository.findAll();
 	}
 
