@@ -13,7 +13,7 @@ public class DomicilioServiceImpl  implements IDomicilioService  {
     DomicilioRepository repository;
 
 	@Override
-	public List<Domicilio> buscarTodosDomicilios() {
+	public List<Domicilio> buscarTodosLosDomicilios() {
 		return repository.findAll();
 	}
 
@@ -28,8 +28,8 @@ public class DomicilioServiceImpl  implements IDomicilioService  {
 	}
 
 	@Override
-	public void guardar(Domicilio domicilio) {
-		repository.save(domicilio);
+	public Domicilio guardar(Domicilio domicilio) {
+		return repository.save(domicilio);
 
 	}
 
@@ -37,6 +37,11 @@ public class DomicilioServiceImpl  implements IDomicilioService  {
 	public void eliminar(Integer id) {
 		repository.deleteById(id);
 
+	}
+
+	@Override
+	public boolean existe(Integer id) {
+		return (id == null) ? false: repository.existsById(id);
 	}
 	
 	
