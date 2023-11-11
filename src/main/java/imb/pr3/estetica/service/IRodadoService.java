@@ -8,8 +8,8 @@ public interface IRodadoService {
 	
 	List<Rodado> buscarTodos();
 	Rodado buscarPorId(Integer id);
-	void crear(Rodado rodado);
+	Rodado guardar(Rodado rodado);
 	void eliminar(Integer id);
-	boolean existePorId(Integer id);
+	public boolean existe(Integer id);
 
 }

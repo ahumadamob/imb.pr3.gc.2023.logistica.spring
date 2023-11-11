@@ -32,8 +32,9 @@ public class RodadoService implements IRodadoService{
 	}
 
 	@Override
-	public void crear(Rodado rodado) {
-		repository.save(rodado);
+	public Rodado guardar(Rodado rodado) {
+		return repository.save(rodado);
+
 	}
 
 	@Override
@@ -42,9 +43,8 @@ public class RodadoService implements IRodadoService{
 	}
 	
 	@Override
-    public boolean existePorId(Integer id) {
-        Rodado rodado = buscarPorId(id);
-        return rodado != null;
+	public boolean existe(Integer id) {
+    	return (id == null) ? false: repository.existsById(id);
     }
 
 }
