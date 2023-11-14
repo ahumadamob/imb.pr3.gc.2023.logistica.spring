@@ -69,7 +69,7 @@ public class DomicilioController {
 	public ResponseEntity<APIResponse<Domicilio>> eliminarDomicilio (@PathVariable("id") Integer id) {
 	    if (service.existe(id)) {
 	        service.eliminar(id);
-	        return ResponseUtil.successDeleted("Domicilio con ID " + id + " ha sido eliminada correctamente");
+	        return ResponseUtil.success("Domicilio con ID " + id + " ha sido eliminada correctamente");
 	    }else {
 	        return ResponseUtil.badRequest("No existe el domicilio con el id identificado");
 	    }
