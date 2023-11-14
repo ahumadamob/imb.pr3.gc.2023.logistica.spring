@@ -1,4 +1,4 @@
-package imb.pr3.estetica.controller;
+ package imb.pr3.estetica.controller;
 
 import java.util.List;
 

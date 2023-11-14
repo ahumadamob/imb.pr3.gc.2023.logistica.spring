@@ -32,13 +32,19 @@ public class RodadoService implements IRodadoService{
 	}
 
 	@Override
-	public void crear(Rodado rodado) {
-		repository.save(rodado);
+	public Rodado guardar(Rodado rodado) {
+		return repository.save(rodado);
+
 	}
 
 	@Override
 	public void eliminar(Integer id) {
 		repository.deleteById(id);
 	}
+	
+	@Override
+	public boolean existe(Integer id) {
+    	return (id == null) ? false: repository.existsById(id);
+    }
 
 }

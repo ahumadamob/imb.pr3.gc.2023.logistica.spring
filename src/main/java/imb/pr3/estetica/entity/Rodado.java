@@ -4,6 +4,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 public class Rodado {
@@ -11,9 +14,13 @@ public class Rodado {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
+	@NotNull
 	private String patente;
-	private String marca;
-	private Integer modelo;
+	@ManyToOne
+    @JoinColumn(name = "marca_id")
+    private Marca marca;
+	private Integer añoFabricacion;
+	
 	public Integer getId() {
 		return id;
 	}
@@ -26,17 +33,19 @@ public class Rodado {
 	public void setPatente(String patente) {
 		this.patente = patente;
 	}
-	public String getMarca() {
-		return marca;
+	public Marca getMarca() {
+        return marca;
+    }
+    public void setMarca(Marca marca) {
+        this.marca = marca;
+    }
+    
+	public Integer getAñoFabricacion() {
+		return añoFabricacion;
 	}
-	public void setMarca(String marca) {
-		this.marca = marca;
-	}
-	public Integer getModelo() {
-		return modelo;
-	}
-	public void setModelo(Integer modelo) {
-		this.modelo = modelo;
+	
+	public void setAñoFabricacion(Integer añoFabricacion) {
+		this.añoFabricacion = añoFabricacion;
 	}
 
 }
