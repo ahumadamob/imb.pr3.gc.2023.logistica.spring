@@ -3,23 +3,24 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import imb.pr3.estetica.entity.Ciudad;
 import imb.pr3.estetica.entity.Domicilio;
+import imb.pr3.estetica.entity.Provincia;
+import imb.pr3.estetica.repository.CiudadRepository;
 import imb.pr3.estetica.repository.DomicilioRepository;
+import imb.pr3.estetica.service.ICiudadService;
 import imb.pr3.estetica.service.IDomicilioService;
 
 @Service
-public class DomicilioServiceImpl  implements IDomicilioService  {
+public class CiudadServiceImpl  implements ICiudadService  {
 	@Autowired
-    DomicilioRepository repository;
+    CiudadRepository repository;
+
 
 	@Override
-	public List<Domicilio> buscarTodosLosDomicilios() {
-		return repository.findAll();
-	}
-
-	@Override
-	public Domicilio buscarPorId(Integer id) {
-		Optional <Domicilio>optional = repository.findById(id);
+	public Ciudad buscarPorId(Integer id) {
+		Optional <Ciudad>optional = repository.findById(id);
 		if (optional.isPresent()) {
 			return optional.get();
 		}else {
@@ -28,8 +29,8 @@ public class DomicilioServiceImpl  implements IDomicilioService  {
 	}
 
 	@Override
-	public Domicilio guardar(Domicilio domicilio) {
-		return repository.save(domicilio);
+	public void guardar(Ciudad ciudad) {
+		repository.save(ciudad);
 
 	}
 
@@ -38,12 +39,10 @@ public class DomicilioServiceImpl  implements IDomicilioService  {
 		repository.deleteById(id);
 
 	}
-
+ 
 	@Override
-	public boolean existe(Integer id) {
-		return (id == null) ? false: repository.existsById(id);
+	public List<Ciudad> buscarTodos() {
+		return repository.findAll();
 	}
 	
-	
-
 }
