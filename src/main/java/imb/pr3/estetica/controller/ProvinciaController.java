@@ -4,6 +4,7 @@ package imb.pr3.estetica.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +16,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.Iterator;
+
 
 import imb.pr3.estetica.service.IProvinciaService;
 import imb.pr3.estetica.util.ResponseUtil;
@@ -103,4 +108,67 @@ public class ProvinciaController {
     }    
 	
 	
+    private List<Provincia> provincias = new ArrayList<>();
+    
+    @PutMapping("/provincia/habilitar/{id}")
+    public ResponseEntity<String> habilitarProvincia(@PathVariable Integer id) {
+        Provincia provincia = service.buscarPorId(id);
+
+        if (provincia != null) {
+            provincia.setHabilitado(true);
+            service.guardar(provincia);  // Asegúrate de tener un método en tu servicio para guardar la provincia
+            return ResponseEntity.ok("Provincia habilitada correctamente");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provincia no encontrada");
+        }
+    }
+    
+    @PutMapping("/provincia/deshabilitar/{id}")
+    public ResponseEntity<String> deshabilitarProvincia(@PathVariable Integer id) {
+        Provincia provincia = service.buscarPorId(id);
+
+        if (provincia != null) {
+            provincia.setHabilitado(false);
+            service.guardar(provincia);  // Asegúrate de tener un método en tu servicio para guardar la provincia
+            return ResponseEntity.ok("Provincia deshabilitada correctamente");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provincia no encontrada");
+        }
+    }
+    
+    @GetMapping("/provincia/habilitadas")
+    public ResponseEntity<APIResponse<List<Provincia>>> obtenerProvinciasHabilitadas() {
+        List<Provincia> provinciasHabilitadas = service.buscarTodos().stream()
+                .filter(Provincia::isHabilitado)
+                .collect(Collectors.toList());
+
+        return provinciasHabilitadas.isEmpty() ?
+               ResponseUtil.notFound("No hay provincias habilitadas") :
+               ResponseUtil.success(provinciasHabilitadas);
+    }
+    
+    @GetMapping("/provincia/deshabilitadas")
+    public ResponseEntity<APIResponse<List<Provincia>>> obtenerProvinciasDeshabilitadas() {
+        List<Provincia> provinciasDeshabilitadas = service.buscarTodos().stream()
+                .filter(provincia -> !provincia.isHabilitado())
+                .collect(Collectors.toList());
+
+        return provinciasDeshabilitadas.isEmpty() ?
+               ResponseUtil.notFound("No hay provincias deshabilitadas") :
+               ResponseUtil.success(provinciasDeshabilitadas);
+    }
+    
+    @DeleteMapping("/provincia/eliminar/{id}")
+    public ResponseEntity<String> eliminar(@PathVariable Integer id) {
+        Provincia provincia = service.buscarPorId(id);
+
+        if (provincia != null && !provincia.isHabilitado()) {
+            service.eliminar(id);
+            return ResponseEntity.ok("Provincia deshabilitada eliminada correctamente");
+        } else if (provincia == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró la provincia con el id proporcionado");
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La provincia está habilitada y no se puede eliminar");
+        }
+    }
 }
